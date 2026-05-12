@@ -6,7 +6,6 @@ The application allows users to upload PDF or text documents, store document emb
 
 In addition to document-based Q&A, the chatbot can also perform utility-based tasks like calculations and date/time retrieval.
 
----
 
 # Features
 
