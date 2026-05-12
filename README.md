@@ -126,6 +126,4 @@ Streamlit was added as a minimal frontend to quickly test document upload and ch
 
 * Add authentication
 * Add conversation persistence in database
-* Add support for image-based PDFs
 * Add advanced agent workflows 
-* Add streaming responses in frontend
