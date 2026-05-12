@@ -1,441 +1,131 @@
 # AI RAG Agent Chatbot
 
-A FastAPI-based conversational assistant that can answer questions from uploaded documents and use tools such as web search, calculator, and date/time when required.
+A conversational AI chatbot built using FastAPI, Streamlit, OpenAI, and ChromaDB. The project supports document-based question answering using RAG (Retrieval Augmented Generation) along with simple agent/tool capabilities.
 
-This project was built for an AI Developer technical assessment. The focus is on a working API-first application with clean structure, simple local setup, document Q&A, streaming responses, conversation history, and basic agent-style tool usage.
+The application allows users to upload PDF or text documents, store document embeddings in a vector database, and ask contextual questions from the uploaded content.
 
----
-
-## Features
-
-- Upload PDF, TXT, or Markdown files
-- Extract and split document text into chunks
-- Generate embeddings with OpenAI
-- Store document chunks in ChromaDB
-- Retrieve relevant chunks for document-based Q&A
-- Streaming chat response endpoint
-- Session-based conversation history
-- System prompt for assistant behavior
-- Tool calling support
-  - Web search using DuckDuckGo
-  - Calculator
-  - Current date/time
-- Basic Streamlit frontend for local testing
-- `.env.example` for environment setup
-- Unit tests for chunking logic
+In addition to document-based Q&A, the chatbot can also perform utility-based tasks like calculations and date/time retrieval.
 
 ---
 
-## Tech Stack
+# Features
 
-| Area | Technology |
-|---|---|
-| Backend | FastAPI |
-| Frontend | Streamlit |
-| LLM | OpenAI Chat Model |
-| Embeddings | OpenAI Embeddings |
-| Vector Database | ChromaDB |
-| PDF Parsing | pypdf |
-| Web Search | DuckDuckGo Search |
-| Testing | Pytest |
+* Upload PDF and text files
+* Extract and process document content
+* Generate embeddings using OpenAI
+* Store embeddings in ChromaDB
+* Context-aware document question answering
+* Multi-turn conversation support
+* Tool-based responses (calculator and date/time)
+* FastAPI backend
+* Streamlit frontend
 
-Python **3.11** is recommended for smooth dependency installation, especially on Windows.
 
----
 
-## Project Structure
+# Technologies Used
 
-```text
-ai-rag-agent-chatbot/
-│
-├── app/
-│   ├── api/
-│   │   └── routes.py              # FastAPI endpoints
-│   │
-│   ├── core/
-│   │   ├── config.py              # Environment settings
-│   │   └── prompts.py             # Assistant system prompt
-│   │
-│   ├── models/
-│   │   └── schemas.py             # Request/response schemas
-│   │
-│   ├── services/
-│   │   ├── chat_service.py        # Chat flow, RAG context, tool calling
-│   │   ├── session_store.py       # In-memory chat history
-│   │   └── vector_store.py        # ChromaDB and OpenAI embeddings
-│   │
-│   ├── tools/
-│   │   ├── calculator.py          # Safe arithmetic tool
-│   │   ├── date_time.py           # Current date/time tool
-│   │   └── web_search.py          # DuckDuckGo web search tool
-│   │
-│   ├── utils/
-│   │   ├── chunking.py            # Text chunking logic
-│   │   └── file_loader.py         # PDF/TXT/MD text extraction
-│   │
-│   └── main.py                    # Application entry point
-│
-├── frontend/
-│   └── streamlit_app.py           # Basic UI for testing
-│
-├── data/
-│   ├── chroma/                    # Local ChromaDB data
-│   └── uploads/                   # Uploaded files
-│
-├── tests/
-│   └── test_chunking.py
-│
-├── .env.example
-├── .gitignore
-├── requirements.txt
-├── pytest.ini
-└── README.md
-```
+* Python
+* FastAPI
+* Streamlit
+* OpenAI API
+* ChromaDB
+* DuckDuckGo Search
 
----
 
-## Local Setup
+# How to Run the Project
 
-### 1. Clone the repository
+## Step 1: Clone the repository
 
-```bash
-git clone <your-github-repo-url>
-cd ai-rag-agent-chatbot
-```
+Clone the repository from GitHub and move into the project directory.
 
-If you are running from a ZIP file, extract it and open the `ai-rag-agent-chatbot` folder in VS Code.
+git clone [https://github.com/shwetakinger37/ai_rag_agent.git](https://github.com/shwetakinger37/ai_rag_agent.git)
+cd ai_rag_agent
 
----
+## Step 2: Create virtual environment
 
-### 2. Check Python version
+Create a Python virtual environment for the project.
 
-Use Python 3.11:
+python -m venv .venv
 
-```bash
-py -3.11 --version
-```
+## Step 3: Activate virtual environment
 
-Expected output:
+For Windows systems, activate the virtual environment using:
 
-```text
-Python 3.11.x
-```
-
----
-
-### 3. Create virtual environment
-
-Windows:
-
-```bash
-py -3.11 -m venv .venv
-```
-
-Mac/Linux:
-
-```bash
-python3.11 -m venv .venv
-```
-
----
-
-### 4. Activate virtual environment
-
-Windows:
-
-```bash
 .venv\Scripts\activate
-```
 
-Mac/Linux:
+## Step 4: Install dependencies
 
-```bash
-source .venv/bin/activate
-```
+Install all required dependencies from the requirements file.
 
-Check that the correct Python version is active:
-
-```bash
-python --version
-```
-
----
-
-### 5. Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
 
----
+## Step 5: Create .env file
 
-### 6. Create `.env` file
+Create a `.env` file in the root directory and add the following environment variables.
 
-Copy `.env.example` and create a new file named `.env` in the project root.
-
-```env
-OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_API_KEY=your_openai_api_key
 CHAT_MODEL=gpt-4o-mini
 EMBEDDING_MODEL=text-embedding-3-small
-APP_NAME=AI RAG Agent Chatbot
 CHROMA_DIR=data/chroma
 UPLOAD_DIR=data/uploads
 TOP_K=4
-```
 
-Do not commit `.env` to GitHub.
+## Step 6: Run FastAPI backend
 
----
+Start the FastAPI backend server using the following command.
 
-## Run the Application
-
-### 1. Start FastAPI backend
-
-```bash
 uvicorn app.main:app --reload
-```
 
-Backend will run at:
+Swagger API documentation will be available at:
 
-```text
-http://127.0.0.1:8000
-```
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-Swagger API docs:
+## Step 7: Run Streamlit frontend
 
-```text
-http://127.0.0.1:8000/docs
-```
+Open another terminal window and start the Streamlit frontend.
 
----
-
-### 2. Start Streamlit frontend
-
-Open a second terminal, activate the same virtual environment, then run:
-
-```bash
 streamlit run frontend/streamlit_app.py
-```
 
-Streamlit usually opens at:
 
-```text
-http://localhost:8501
-```
 
----
+# How the Application Works
 
-## How to Test the Flow
+The user uploads a document through the frontend interface. The backend extracts the text content from the document and splits it into smaller chunks.
 
-### Test 1: Health Check
+Embeddings are generated for these chunks and stored in ChromaDB.
 
-Open:
+When the user asks a question, the application retrieves the most relevant chunks using similarity search and sends them to the language model as context.
 
-```text
-http://127.0.0.1:8000/docs
-```
+The chatbot then generates a response based on the retrieved information.
 
-Run:
+If the question requires a utility action such as calculation or date retrieval, the request is routed to the appropriate tool.
 
-```http
-GET /api/health
-```
 
-Expected response:
 
-```json
-{
-  "status": "ok",
-  "app_name": "AI RAG Agent Chatbot"
-}
-```
+# Design Decisions
 
----
+The project was intentionally kept simple and modular for easier understanding and debugging.
 
-### Test 2: Upload a Document
+FastAPI was used for backend APIs because of its speed and async support.
 
-Use Swagger or Streamlit to upload a PDF/TXT/MD file.
+ChromaDB was selected as a lightweight local vector database suitable for interview assignments and local development.
 
-API endpoint:
+Streamlit was added as a minimal frontend to quickly test document upload and chatbot functionality.
 
-```http
-POST /api/upload
-```
 
-Example curl:
 
-```bash
-curl -X POST "http://127.0.0.1:8000/api/upload" \
-  -F "file=@sample.pdf"
-```
+# Notes
 
-Expected behavior:
+* The `.env` file should not be pushed to GitHub.
+* API keys should always remain private.
+* Uploaded files and vector database files are ignored through `.gitignore`.
 
-1. File is saved in `data/uploads`
-2. Text is extracted
-3. Chunks are created
-4. Embeddings are generated
-5. Chunks are stored in ChromaDB
 
----
 
-### Test 3: Ask a Document Question
+# Future Improvements
 
-API endpoint:
-
-```http
-POST /api/chat/stream
-```
-
-Example request body:
-
-```json
-{
-  "session_id": "demo-session",
-  "message": "What is this document about?",
-  "use_rag": true
-}
-```
-
-Example curl:
-
-```bash
-curl -N -X POST "http://127.0.0.1:8000/api/chat/stream" \
-  -H "Content-Type: application/json" \
-  -d "{\"session_id\":\"demo-session\",\"message\":\"What is this document about?\",\"use_rag\":true}"
-```
-
----
-
-### Test 4: Tool Calling
-
-Try these questions in Streamlit:
-
-```text
-Calculate 125 * 18
-```
-
-```text
-What is today's date and time in India?
-```
-
-```text
-Search the web for the latest OpenAI model updates.
-```
-
----
-
-## How the System Works
-
-### Document Upload and Indexing
-
-When a file is uploaded, the backend extracts text and splits it into overlapping chunks. Each chunk is converted into an embedding using OpenAI and stored in ChromaDB with metadata such as filename, document id, and chunk index.
-
-### RAG Chat Flow
-
-When the user asks a question, the system retrieves the most relevant chunks from ChromaDB and passes them to the LLM as context. If the answer is not available in the uploaded document, the assistant is instructed to say that clearly instead of guessing.
-
-### Agent Tool Flow
-
-The chat service gives the model access to tools. The model can decide whether a tool is needed based on the user message. Tool results are added back into the conversation before the final response is streamed to the user.
-
----
-
-## Design Decisions
-
-### FastAPI
-
-FastAPI was chosen because the task is API-focused and FastAPI provides clean routing, validation, and support for streaming responses.
-
-### ChromaDB
-
-ChromaDB was selected as the vector database because it runs locally and keeps the project easy to review without requiring a hosted vector database account.
-
-### OpenAI Embeddings
-
-OpenAI embeddings were used to keep semantic search quality reliable. The embedding model can be changed from the `.env` file.
-
-### Simple Tool Layer
-
-Instead of adding a heavy multi-agent framework, the project uses OpenAI tool calling directly. This keeps the implementation easier to understand and debug while still satisfying the agent/tool requirement.
-
-### In-Memory Sessions
-
-Conversation history is stored in memory using `session_id`. This is enough for an assessment project. For production, Redis or a database would be a better option.
-
-### Streamlit Frontend
-
-The Streamlit app is included only for quick local testing. The main application is the FastAPI backend.
-
----
-
-## Run Tests
-
-```bash
-pytest
-```
-
----
-
-## GitHub Push Steps
-
-### 1. Check ignored files
-
-Make sure `.env` is not tracked:
-
-```bash
-git status
-```
-
-### 2. Initialize Git
-
-```bash
-git init
-```
-
-### 3. Add files
-
-```bash
-git add .
-```
-
-### 4. Commit
-
-```bash
-git commit -m "Initial commit: AI RAG agent chatbot"
-```
-
-### 5. Connect GitHub repository
-
-```bash
-git branch -M main
-git remote add origin <your-github-repo-url>
-git push -u origin main
-```
-
----
-
-## Submission Checklist
-
-Before submitting the GitHub link:
-
-- [ ] Backend runs with `uvicorn app.main:app --reload`
-- [ ] Swagger opens at `/docs`
-- [ ] Streamlit opens successfully
-- [ ] PDF/TXT/MD upload works
-- [ ] Chunks are stored in ChromaDB
-- [ ] Chat endpoint streams response
-- [ ] Document-based questions work
-- [ ] Calculator/date/web-search tools work
-- [ ] `.env.example` is present
-- [ ] `.env` is not pushed to GitHub
-- [ ] README has setup and run instructions
-
----
-
-## Known Limitations
-
-- Session history is stored in memory and resets when the server restarts.
-- ChromaDB is stored locally, so uploaded document data is local to the machine.
-- Web search depends on DuckDuckGo search availability.
-- A valid OpenAI API key is required for embeddings and chat responses.
+* Add authentication
+* Add conversation persistence in database
+* Add support for image-based PDFs
+* Add advanced agent workflows 
+* Add streaming responses in frontend
